@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<layouts>
+	<!-- Scenario meta -->
+	<layout for="scnr">
+		<int32 name="number of script objects" offset="0x164" />
+		<uint32 name="script object table address" offset="0x168" />
+
+		<int32 name="number of trigger volumes" offset="0x33C" />
+		<uint32 name="trigger volumes table address" offset="0x340" />
+
+		<int32 name="number of cutscene flags" offset="0x4DC" />
+		<uint32 name="cutscene flags table address" offset="0x4E0" />
+
+		<int32 name="number of cutscene camera points" offset="0x4E8" />
+		<uint32 name="cutscene camera points table address" offset="0x4EC" />
+
+		<int32 name="number of cutscene titles" offset="0x4F4" />
+		<uint32 name="cutscene titles table address" offset="0x4F8" />
+
+		<int32 name="number of device groups" offset="0x1DC" />
+		<uint32 name="device groups table address" offset="0x1E0" />
+
+		<int32 name="number of ai squad groups" offset="0x3F8" />
+		<uint32 name="ai squad groups table address" offset="0x3FC" />
+
+		<int32 name="number of ai squads" offset="0x404" />
+		<uint32 name="ai squads table address" offset="0x408" />
+
+		<int32 name="number of ai objects" offset="0x794" />
+		<uint32 name="ai objects table address" offset="0x798" />
+
+		<int32 name="number of starting profiles" offset="0x324" />
+		<uint32 name="starting profiles table address" offset="0x328" />
+
+		<int32 name="number of zone sets" offset="0xFC" />
+		<uint32 name="zone sets table address" offset="0x100" />
+
+		<int32 name="number of object folders" offset="0x6CC" />
+		<uint32 name="object folders table address" offset="0x6D0" />
+
+		<int32 name="point set data count" offset="0x4D0" />
+		<uint32 name="point set data address" offset="0x4D4" />
+	</layout>
+
+	<layout for="point set data element" inherits="point set data element" />
+
+	<layout for="point set element" inherits="point set element" />
+
+	<layout for="point set point element" inherits="point set point element" />
+
+	<layout for="object folder element" inherits="object folder element" />
+
+	<layout for="zone set element" inherits="zone set element" />
+
+	<layout for="starting profile element" inherits="starting profile element" />
+
+	<layout for="trigger volume element" inherits="trigger volume element" />
+
+	<layout for="cutscene flag element" inherits="cutscene flag element" />
+
+	<layout for="cutscene camera point element" inherits="cutscene camera point element" />
+
+	<layout for="cutscene title element" inherits="cutscene title element" />
+
+	<layout for="device group element" inherits="device group element" />
+
+	<layout for="ai squad group element" inherits="ai squad group element" />
+
+	<layout for="ai squad element" inherits="ai squad element" />
+
+	<layout for="ai squad single location element" inherits="ai squad single location element" />
+
+	<layout for="ai object element" inherits="ai object element" />
+
+	<layout for="ai object wave element" inherits="ai object wave element" />
+
+	<layout for="script object element" inherits="script object element" />
+</layouts>

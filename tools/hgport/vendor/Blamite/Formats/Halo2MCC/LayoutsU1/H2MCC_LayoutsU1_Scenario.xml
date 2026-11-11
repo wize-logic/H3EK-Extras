@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<layouts>
+	<layout for="scnr" inherits="scnr" />
+	
+	<layout for="script object element" inherits="script object element" />
+
+	<layout for="script element" inherits="script element" />
+
+	<layout for="script global element" inherits="script global element" />
+
+	<layout for="script expression element" inherits="script expression element" />
+
+	<layout for="simulation definition table element" inherits="simulation definition table element" />
+</layouts>

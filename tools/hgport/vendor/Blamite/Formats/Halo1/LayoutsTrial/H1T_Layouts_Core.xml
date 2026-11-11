@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<layouts>
+	<layout for="header" size="0x800">
+		<uint32 name="header magic" offset="0x2C0" />
+		<uint32 name="cache version" offset="0x588" />
+
+		<uint32 name="file size" offset="0x5E8" />
+		<uint32 name="meta offset" offset="0x5EC" />
+		<uint32 name="meta size" offset="0x2C4" />
+
+		<asciiz name="internal name" offset="0x58C" />
+		<asciiz name="build string" offset="0x2C8" />
+
+		<uint16 name="type" offset="0x2" />
+		<uint32 name="crc checksum" offset="0x5B0" />
+
+		<uint32 name="footer magic" offset="0x5F0" />
+	</layout>
+
+	<layout for="meta header" inherits="meta header" />
+
+	<layout for="tag element" inherits="tag element" />
+
+	<layout for="bsp header" size="0x18">
+		<uint32 name="bsp address" offset="0x0" />
+		<int32 name="magic" offset="0x14" />
+	</layout>
+
+	<layout for="tag block" inherits="tag block" />
+
+	<layout for="tag reference" inherits="tag reference" />
+
+	<layout for="data reference" inherits="data reference" />
+
+	<!-- hmt (hud_message_text) -->
+	<layout for="hmt" inherits="hmt" />
+
+	<layout for="hud message element" inherits="hud message element" />
+
+	<layout for="hud message" inherits="hud message" />
+
+	<!-- str# (string_list) / ustr (unicode_string_list) -->
+	<layout for="str" inherits="str" />
+
+	<layout for="string list element" inherits="string list element" />
+</layouts>

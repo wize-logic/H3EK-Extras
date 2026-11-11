@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<layouts>
+	<!-- Scenario Context -->
+	<layout for="scnr_script_context" inherits="scnr_script_context" />
+
+	<!-- Mission Dialogue Context -->
+	<layout for="mdlg_script_context" inherits="mdlg_script_context" />
+	
+	<!-- Vehicle Seats (Required For Unit Seat Mappings) -->
+	<layout for="vehi_seats" inherits="vehi_seats" />
+</layouts>

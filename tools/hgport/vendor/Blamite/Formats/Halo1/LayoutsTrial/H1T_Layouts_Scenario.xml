@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<layouts>
+	<layout for="scnr" inherits="scnr" />
+
+	<layout for="script object element" inherits="script object element" />
+
+	<layout for="script element" inherits="script element" />
+
+	<layout for="script global element" inherits="script global element" />
+
+	<layout for="script syntax table header" inherits="script syntax table header" />
+
+	<layout for="script syntax table element" inherits="script syntax table element" />
+
+	<layout for="scenario bsp table element" inherits="scenario bsp table element" />
+</layouts>

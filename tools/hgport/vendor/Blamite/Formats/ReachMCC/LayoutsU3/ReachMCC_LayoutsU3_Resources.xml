@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<layouts>
+	<!-- zone (cache_file_resource_gestalt) -->
+	<layout for="resource gestalt" inherits="resource gestalt" />
+
+	<!-- Block at 0x4 in zone -->
+	<layout for="resource type element" inherits="resource type element" />
+
+	<!-- Block at 0x58 in zone -->
+	<layout for="resource table element" inherits="resource table element" />
+
+	<!-- Block at 0x28 in resource table entry -->
+	<layout for="resource fixup element" inherits="resource fixup element" />
+
+	<!-- Block at 0x34 in resource table entry -->
+	<layout for="definition fixup element" inherits="definition fixup element" />
+
+	<layout for="zone set definition" inherits="zone set definition" />
+
+	<!-- Block at x1DC in resource table entry -->
+	<layout for="prediction quanta element" inherits="prediction quanta element" />
+
+	<!-- Block at x1E8 in resource table entry -->
+	<layout for="prediction atom element" inherits="prediction atom element" />
+
+	<!-- Block at x1F4 in resource table entry -->
+	<layout for="prediction molecule atom element" inherits="prediction molecule atom element" />
+
+	<!-- Block at x200 in resource table entry -->
+	<layout for="prediction molecule element" inherits="prediction molecule element" />
+
+	<!-- Block at x20C in resource table entry -->
+	<layout for="prediction molecule key element" inherits="prediction molecule key element" />
+	
+	<!-- play (cache_file_resource_layout_table) -->
+	<layout for="resource layout table" inherits="resource layout table" />
+
+	<!-- Block at 0xC in play -->
+	<layout for="external cache file table element" inherits="external cache file table element" />
+
+	<!-- Block at 0x18 in play -->
+	<layout for="raw page table element" inherits="raw page table element" />
+
+	<!-- Block at 0x24 in play -->
+	<layout for="raw size table element" inherits="raw size table element" />
+
+	<layout for="size part table element" inherits="size part table element" />
+
+	<!-- Block at 0x30 in play -->
+	<layout for="raw segment table element" inherits="raw segment table element" />
+</layouts>

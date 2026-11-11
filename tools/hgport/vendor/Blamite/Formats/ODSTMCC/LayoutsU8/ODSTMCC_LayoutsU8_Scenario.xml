@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<layouts>
+	<!-- Scenario meta -->
+	<layout for="scnr">
+		<int32 name="script string table size" offset="0x418" />
+		<uint32 name="script string table address" offset="0x424" />
+
+		<int32 name="number of scripts" offset="0x42C" />
+		<uint32 name="script table address" offset="0x430" />
+
+		<int32 name="number of script globals" offset="0x438" />
+		<uint32 name="script global table address" offset="0x43C" />
+
+		<int32 name="number of script expressions" offset="0x4DC" />
+		<uint32 name="script expression table address" offset="0x4E0" />
+		
+		<int32 name="number of script tag references" offset="0x444" />
+		<uint32 name="script tag references table address" offset="0x448" />
+	</layout>
+
+	<layout for="script element" inherits="script element" />
+
+	<layout for="script parameter element" inherits="script parameter element" />
+
+	<layout for="script global element" inherits="script global element" />
+
+	<layout for="script expression element" inherits="script expression element" />
+</layouts>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<layouts>
+	<!-- Scenario meta -->
+	<layout for="scnr" inherits="scnr" />
+
+	<layout for="script element" inherits="script element" />
+
+	<layout for="script parameter element" inherits="script parameter element" />
+
+	<layout for="script global element" inherits="script global element" />
+
+	<layout for="script expression element" inherits="script expression element" />
+
+	<layout for="structured effect interop element" inherits="structured effect interop element" />
+
+	<layout for="effect data" inherits="effect data" />
+	<layout for="beam data" inherits="beam data" />
+	<layout for="contrail data" inherits="contrail data" />
+	<layout for="light volume data" inherits="light volume data" />
+</layouts>

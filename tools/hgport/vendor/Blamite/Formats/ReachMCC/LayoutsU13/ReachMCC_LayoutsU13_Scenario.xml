@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<layouts>
+	<!-- Scenario meta -->
+	<layout for="scnr">
+		<int32 name="script string table size" offset="0x41C" />
+		<uint32 name="script string table address" offset="0x428" />
+
+		<int32 name="number of scripts" offset="0x430" />
+		<uint32 name="script table address" offset="0x434" />
+
+		<int32 name="number of script globals" offset="0x43C" />
+		<uint32 name="script global table address" offset="0x440" />
+
+		<int32 name="number of script expressions" offset="0x504" />
+		<uint32 name="script expression table address" offset="0x508" />
+
+		<int32 name="number of script tag references" offset="0x448" />
+		<uint32 name="script tag references table address" offset="0x44C" />
+
+		<int32 name="structured effect interops count" offset="0x840" />
+		<uint32 name="structured effect interop address" offset="0x844" />
+	</layout>
+
+	<layout for="script element" inherits="script element" />
+
+	<layout for="script parameter element" inherits="script parameter element" />
+
+	<layout for="script global element" inherits="script global element" />
+
+	<layout for="script expression element" inherits="script expression element" />
+
+	<layout for="structured effect interop element" inherits="structured effect interop element" />
+
+	<layout for="effect data" inherits="effect data" />
+	<layout for="beam data" inherits="beam data" />
+	<layout for="contrail data" inherits="contrail data" />
+	<layout for="light volume data" inherits="light volume data" />
+</layouts>
