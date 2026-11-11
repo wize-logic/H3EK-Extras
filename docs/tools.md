@@ -12,7 +12,6 @@ Everything used to build, package and inspect a map, with paths. How the pieces 
 | Halo 3 Editing Kit (H3EK) | `C:\Program Files (x86)\Steam\steamapps\common\H3EK` (Steam app 1695791, "Halo 3 Mod Tools - MCC") |
 | Excession (Workshop uploader) | `C:\Program Files (x86)\Steam\steamapps\common\Excession` (Steam app 1695795) |
 | Workshop downloads | `C:\Program Files (x86)\Steam\steamapps\workshop\content\976730\<item id>\` |
-| Project Reclaimer's user folder | `%LOCALAPPDATA%\ProjectReclaimer\` (`Mods`, `Game Modes`): where `release` installs a mod for local testing |
 
 ## Scripts
 
