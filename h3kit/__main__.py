@@ -28,9 +28,13 @@ def main(argv):
     from .donor import HGPORT
     row("hgport.exe (donor ports)", HGPORT / "hgport.exe", fix="tools/hgport/build.sh (needs the .NET SDK)")
     row(".NET SDK", env.DOTNET)
-    row("Project Reclaimer client", env.RECLAIMER_EXE)
-    row("Reclaimer user folder", env.RECLAIMER)
-    row("Excession", env.EXCESSION)
+    row("Excession", env.EXCESSION, fix="Steam: Excession (app 1695795), the Workshop uploader")
+    if env.RECLAIMER:
+        row("Project Reclaimer client", env.RECLAIMER_EXE)
+        row("Reclaimer user folder", env.RECLAIMER)
+    else:
+        print(f"  --   {'Project Reclaimer':28s} not installed: not needed for MCC "
+              "(release fills the Excession upload folder only)")
     if argv:
         from .project import load
         p = load(argv[0])

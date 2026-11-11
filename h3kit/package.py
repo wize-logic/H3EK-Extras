@@ -5,8 +5,8 @@ Mod, the Workshop images, and the release copies.
     python3 -m h3kit.package maps/<map> images [--art X]   # images/ from a picture (no text: the game
                                                            # draws the map's name itself)
     python3 -m h3kit.package maps/<map> release [--yes]    # sync the package into the Excession upload
-                                                           # folder and the installed mod (dry run
-                                                           # without --yes)
+                                                           # folder (and Project Reclaimer's Mods, if
+                                                           # installed); dry run without --yes
 
 A package folder holds ModInfo.json, maps\\<file>.map, multiplayer\\<file>.json,
 images\\, and whatever else the map ships (a donor's halo3\\fmod\\pc sound banks, a
@@ -27,6 +27,7 @@ from .project import active, load
 
 SIZES = {"large.png": (668, 292), "thumbnail.png": (316, 160), "loading.png": (1920, 1080)}
 GAME_MODES = "Project Reclaimer Game Modes"     # a package folder of game type JSONs for Reclaimer players
+INSTALLED = "installed mod (Reclaimer)"
 
 
 def version(v):
@@ -122,16 +123,21 @@ def write_images(out, art=None, fallback=None):
 
 # -- release ----------------------------------------------------------------------------
 
-def targets(project=None):
-    """{label: folder} the package is copied to: the Excession upload folder and the
-    installed mod (Reclaimer's Mods\\<title>). release() also puts the package's game
-    types in Reclaimer's Game Modes."""
-    p = project or active()
+def release_targets(title, upload_dir):
+    """{label: folder} a package is copied to: the Excession upload folder (when set) and,
+    when Project Reclaimer is installed (env.RECLAIMER), its Mods\\<title>."""
     out = {}
-    if p.mod.upload_dir:
-        out["upload (Excession)"] = Path(p.mod.upload_dir)
-    out["installed mod"] = env.RECLAIMER / "Mods" / p.mod.title
+    if upload_dir:
+        out["upload (Excession)"] = Path(upload_dir)
+    if env.RECLAIMER:
+        out[INSTALLED] = env.RECLAIMER / "Mods" / title
     return out
+
+
+def targets(project=None):
+    """{label: folder} the project's package is copied to (release_targets)."""
+    p = project or active()
+    return release_targets(p.mod.title, p.mod.upload_dir)
 
 
 def _digest(path):
@@ -146,24 +152,25 @@ def _same(a, b):
     return b.exists() and a.stat().st_size == b.stat().st_size and _digest(a) == _digest(b)
 
 
-def release(project=None, apply=False):
-    """Copy every package file that differs into each target (and the game types into
-    Reclaimer's Game Modes); with apply=False only list them. Returns the changes."""
-    p = project or active()
-    pkg = p.package_dir
-    if not p.package_map.exists():
-        raise SystemExit(f"release: {p.package_map} is missing; build the map first")
+def sync(pkg, targets, apply=False, what="package"):
+    """Copy every file of the package folder `pkg` that differs into each of `targets`
+    ({label: folder}, release_targets), and its game types into Project Reclaimer's Game
+    Modes when Reclaimer is installed; with apply=False only list them. Returns the changes."""
+    if not targets:
+        owner = "Pack" if what == "pack" else "Mod"
+        raise SystemExit(f"release: nowhere to copy the {what}: set {owner}.upload_dir (the folder Excession "
+                         f"uploads from), or upload the package folder itself with Excession: {pkg}")
     files = [f for f in sorted(pkg.rglob("*")) if f.is_file()]
     plan = []
-    for label, folder in targets(p).items():
+    for label, folder in targets.items():
         for f in files:
             rel = f.relative_to(pkg)
-            if label == "installed mod" and rel.parts[0] == GAME_MODES:
+            if label == INSTALLED and rel.parts[0] == GAME_MODES:
                 continue    # Reclaimer reads game types from its own Game Modes folder (below)
             if not _same(f, folder / rel):
                 plan.append((label, f, folder / rel))
     modes = pkg / GAME_MODES
-    if modes.is_dir():
+    if env.RECLAIMER and modes.is_dir():
         for f in sorted(modes.glob("*.json")):
             dst = env.RECLAIMER / "Game Modes" / f.name
             if not _same(f, dst):
@@ -176,10 +183,19 @@ def release(project=None, apply=False):
             if not _same(src, dst):
                 raise SystemExit(f"release: {dst} differs after the copy")
     if not plan:
-        print("release: every target already matches the package")
+        print(f"release: every target already matches the {what}")
     elif not apply:
         print("dry run: add --yes to copy")
     return plan
+
+
+def release(project=None, apply=False):
+    """Sync the project's package into its release targets (sync); with apply=False only
+    list the copies. Returns the changes."""
+    p = project or active()
+    if not p.package_map.exists():
+        raise SystemExit(f"release: {p.package_map} is missing; build the map first")
+    return sync(p.package_dir, targets(p), apply)
 
 
 def main(argv=None):

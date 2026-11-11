@@ -17,7 +17,7 @@ These are the limits a big map runs into. Most were found by reverse engineering
 | Scenario vehicle placement block | at least 256 |  |
 | Tag section (header `+0x14`, the tags loaded into memory) | at least 170 MB | `halo3.dll` 0x1800a6250 compares it with its tag memory region and refuses the map: "tag memory size invalid (%u, should be within [0, %u])" |
 
-The build tool (`tool_fast build-cache-file`) keeps the stock 1.5 MB pool and logs OUT OF MEMORY for objects past it.
+The build tool (`tool_fast build-cache-file`) keeps the stock 1.5 MB pool and logs OUT OF MEMORY for objects past it. MCC's `halo3.dll` has the same pool, so the objects the tool can't create aren't created in game either, and the players, their weapons, bodies, dropped weapons and projectiles need room in it too. `--plan-only` checks the level against `object_memory.MCC_LEVEL_BUDGET`: the pool less 16 players and about 23.6 KB of headroom each, about 978 KB.
 
 ## Tag memory
 

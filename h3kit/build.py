@@ -378,6 +378,9 @@ class Builder:
         for f in dumps:
             f.unlink()
         print(f"build tool object pool: {len(dumps)} overflow reports (removed)")
+        if dumps:   # stock MCC's halo3.dll has the tool's pool: only Reclaimer's larger one has room
+            print("  warning: on stock MCC the game's object pool is the tool's, so those objects won't be "
+                  "created in game either (and players need room too); --plan-only shows the budget")
         if code or not any("successfully built" in t for t in tail):
             sys.exit("build failed:\n" + "\n".join(tail))
         placed = sc.built_counts(p.built_map)

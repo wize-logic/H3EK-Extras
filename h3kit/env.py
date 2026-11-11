@@ -1,5 +1,5 @@
 """Where things are on this machine: Steam, the Editing Kit, MCC, the Workshop
-downloads, Project Reclaimer and the .NET SDK, seen from WSL.
+downloads, the .NET SDK and (optionally) Project Reclaimer, seen from WSL.
 
 The defaults are a standard Steam install on C:. Override any of them with an
 environment variable or with a `local_paths.json` beside this package's
@@ -10,6 +10,9 @@ folder (the repository root), e.g.
 Keys (and environment variables H3KIT_<KEY in capitals>): steamapps, ek,
 mcc, workshop, documents, reclaimer (the user folder), reclaimer_exe, dotnet,
 python_launcher.
+
+Nothing needs Project Reclaimer: RECLAIMER is None unless it is set here or its
+user folder exists; without it, `release` copies only to the Excession upload folder.
 """
 
 import getpass
@@ -47,7 +50,18 @@ DOCUMENTS = _get("documents", f"/mnt/c/Users/{getpass.getuser()}/Documents")
 # leaves a "Your files moved.txt" there). 0.9 and earlier still use the Documents folder.
 _LEGACY_RECLAIMER = DOCUMENTS / "My Games" / "Project Reclaimer"
 _APPDATA_RECLAIMER = DOCUMENTS.parent / "AppData" / "Local" / "ProjectReclaimer"
-RECLAIMER = _get("reclaimer", _APPDATA_RECLAIMER if _APPDATA_RECLAIMER.is_dir() else _LEGACY_RECLAIMER)
+
+
+def _reclaimer():
+    """The configured user folder, else the one that exists; None when Reclaimer isn't installed
+    (so nothing creates its folders on a machine that only has MCC)."""
+    v = os.environ.get("H3KIT_RECLAIMER") or _local().get("reclaimer")
+    if v:
+        return Path(v)
+    return next((d for d in (_APPDATA_RECLAIMER, _LEGACY_RECLAIMER) if d.is_dir()), None)
+
+
+RECLAIMER = _reclaimer()
 RECLAIMER_EXE = _get("reclaimer_exe", DOCUMENTS.parent / "Desktop" / "Reclaimer" / "Reclaimer.exe")
 DOTNET = _get("dotnet", "/mnt/c/Program Files/dotnet/dotnet.exe")  # builds tools/hgport
 PY_LAUNCHER = _get("python_launcher", "/mnt/c/Windows/py.exe")     # Windows Python, for the kit's bake script

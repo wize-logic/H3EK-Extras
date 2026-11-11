@@ -30,8 +30,10 @@ Engine facts (tool_fast.exe and MCC halo3.dll alike; addresses from halo3_tag_te
     cost(tag, kind)     -> pool bytes of one placement, children included
     objects(tag, kind)  -> how many objects (of the 2048) one placement creates
     plan_bytes(plan)    -> totals for a scenario.Plan
-    report(plan)        -> those totals as text
-    PLAYER_COST         -> one mp Spartan + two starting weapons (127 at runtime)
+    report(plan)        -> those totals as text, against the tool's pool and the game's
+    PLAYER_COST         -> one mp Spartan + two starting weapons (16 at runtime on MCC,
+                           127 under Project Reclaimer)
+    MCC_LEVEL_BUDGET    -> the level's share of the pool in game on stock MCC
 
 Tag data is read from tool export-tag-to-xml (cached under work\\object_memory_xml) and
 render model node/region counts from mbedit; results are cached in
@@ -58,9 +60,12 @@ RECLAIMER_POOL_BYTES = 0xa00000      # 10,485,760
 RECLAIMER_MAX_OBJECTS = 0x2000       # 8192
 # a clean build: placements + stock objects must fit the tool's pool; keep 1% for rounding/fragmentation
 TOOL_LEVEL_BUDGET = POOL_BYTES * 99 // 100
+MCC_PLAYERS = 16
+RECLAIMER_PLAYERS = 127
 # in game under Reclaimer: the pool less 127 players and room for their bodies
 # (about 10.6 KB each for 30 s), dropped weapons and projectiles
 GAME_HEADROOM = 3_000_000
+PLAYER_HEADROOM = GAME_HEADROOM // RECLAIMER_PLAYERS    # the same room per player on stock MCC
 
 # object type struct sizes (object type definitions +0xc; identical in halo3_tag_test.exe and tool_fast.exe)
 TYPE_SIZE = {"biped": 1744, "vehicle": 1952, "weapon": 648, "equipment": 396, "terminal": 668,
@@ -416,7 +421,12 @@ def player_cost():
 
 # player_cost(): mp_masterchief 9552 + its two "gear" variant objects 2 x 544 + assault_rifle 1472 + battle_rifle 1456
 PLAYER_COST = 13568
-GAME_LEVEL_BUDGET = RECLAIMER_POOL_BYTES - 127 * PLAYER_COST - GAME_HEADROOM
+# in game on stock MCC: halo3.dll's pool is the tool's, so the level shares those 1.5 MB with
+# 16 players, their bodies, dropped weapons and projectiles: about 978 KB for the level
+MCC_LEVEL_BUDGET = POOL_BYTES - MCC_PLAYERS * (PLAYER_COST + PLAYER_HEADROOM)
+# in game under Project Reclaimer (its 10.5 MB pool): about 5.76 MB for the level
+GAME_LEVEL_BUDGET = RECLAIMER_POOL_BYTES - RECLAIMER_PLAYERS * PLAYER_COST - GAME_HEADROOM
+RECLAIMER_LEVEL_BUDGET = GAME_LEVEL_BUDGET
 
 
 def plan_bytes(plan, stock=True):
@@ -483,10 +493,14 @@ def report(plan):
     out.append("top tags by total bytes:")
     for (k, t), (n, b) in sorted(r["by_tag"].items(), key=lambda kv: -kv[1][1])[:15]:
         out.append(f"  {b:>10,}  {n:>4} x {b // n:>6,}  {k:<10} {t}")
-    over = r["total"] - TOOL_LEVEL_BUDGET
-    out.append(f"tool budget (clean build, {TOOL_LEVEL_BUDGET:,} bytes): "
-               + ("fits" if over <= 0 else f"OVER by {over:,} bytes"))
-    rt = r["total"] + 127 * PLAYER_COST
-    out.append(f"runtime with 127 players: {rt:,} bytes = {100 * rt / POOL_BYTES:.0f}% of the stock pool, "
-               f"{100 * rt / RECLAIMER_POOL_BYTES:.0f}% of Reclaimer's {RECLAIMER_POOL_BYTES:,}")
+    def verdict(budget):
+        over = r["total"] - budget
+        return "fits" if over <= 0 else f"OVER by {over:,} bytes"
+
+    out.append(f"tool budget (clean build, {TOOL_LEVEL_BUDGET:,} bytes): {verdict(TOOL_LEVEL_BUDGET)}")
+    out.append(f"in game on MCC ({MCC_PLAYERS} players, {MCC_LEVEL_BUDGET:,} bytes for the level): "
+               f"{verdict(MCC_LEVEL_BUDGET)}"
+               + ("" if r["total"] <= MCC_LEVEL_BUDGET else "; objects past the pool aren't created in game"))
+    out.append(f"under Project Reclaimer ({RECLAIMER_PLAYERS} players, {RECLAIMER_POOL_BYTES:,}-byte pool, "
+               f"{GAME_LEVEL_BUDGET:,} bytes for the level): {verdict(GAME_LEVEL_BUDGET)}")
     return "\n".join(out)

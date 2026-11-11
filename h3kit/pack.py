@@ -9,12 +9,12 @@ shared.map and campaign.map in halo3/maps/:
     multiplayer/<file>.json              each map's own JSON, its images renamed per map
     images/large.png, thumbnail.png      the pack's (a strip of its maps' pictures)
     images/large_<file>.png ...          each map's large, thumbnail and loading pictures
-    Project Reclaimer Game Modes/        every map's game types
+    Project Reclaimer Game Modes/        every map's game types (if any map has them)
     halo3/maps/shared.map, campaign.map  a shared pack's own (built with its maps)
 
     python3 -m h3kit.pack packs/<pack> build-shared     # a shared pack's maps -> packs/<pack>/shared
     python3 -m h3kit.pack packs/<pack> build            # assemble packs/<pack>/package
-    python3 -m h3kit.pack packs/<pack> release [--yes]  # into the upload folder and Reclaimer's Mods
+    python3 -m h3kit.pack packs/<pack> release [--yes]  # into the upload folder (and Reclaimer's Mods, if installed)
 
 A pack's folder holds pack.py defining PACK = Pack(...). Each map keeps its scenario, map id and
 MapGuid, so the pack and a map's own mod shouldn't be installed side by side.
@@ -28,7 +28,6 @@ import shutil
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from . import env
 from . import package as P
 
 
@@ -271,41 +270,12 @@ def build_shared(pack):
 
 
 def release(pack, apply=False):
-    """Copy every pack file that differs into the upload folder and Reclaimer's Mods\\<title> (and the
-    game types into Reclaimer's Game Modes); with apply=False only list them."""
+    """Copy every pack file that differs into the upload folder (and Project Reclaimer's Mods\\<title>
+    and Game Modes, when Reclaimer is installed); with apply=False only list them."""
     pkg = pack.package_dir
     if not (pkg / "ModInfo.json").exists():
         raise SystemExit("release: build the pack first")
-    targets = {"installed mod": env.RECLAIMER / "Mods" / pack.title}
-    if pack.upload_dir:
-        targets["upload (Excession)"] = Path(pack.upload_dir)
-    files = [f for f in sorted(pkg.rglob("*")) if f.is_file()]
-    plan = []
-    for label, folder in targets.items():
-        for f in files:
-            rel = f.relative_to(pkg)
-            if label == "installed mod" and rel.parts[0] == P.GAME_MODES:
-                continue
-            if not P._same(f, folder / rel):
-                plan.append((label, f, folder / rel))
-    modes = pkg / P.GAME_MODES
-    if modes.is_dir():
-        for f in sorted(modes.glob("*.json")):
-            dst = env.RECLAIMER / "Game Modes" / f.name
-            if not P._same(f, dst):
-                plan.append(("Reclaimer game modes", f, dst))
-    for label, src, dst in plan:
-        print(f"{'copy' if apply else 'would copy'} [{label}] {src.relative_to(pkg)} -> {dst}")
-        if apply:
-            dst.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(src, dst)
-            if not P._same(src, dst):
-                raise SystemExit(f"release: {dst} differs after the copy")
-    if not plan:
-        print("release: every target already matches the pack")
-    elif not apply:
-        print("dry run: add --yes to copy")
-    return plan
+    return P.sync(pkg, P.release_targets(pack.title, pack.upload_dir), apply, what="pack")
 
 
 def main(argv=None):

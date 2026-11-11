@@ -23,7 +23,7 @@ Run from the repository root, in WSL. `<map>` is a map folder such as `maps/exam
 | `python3 -u <map>/build.py ...` | The build driver (`h3kit/build.py`): level, layout, light bake, map, donor ports, package copy. `--light draft/low/medium/high/none`, `--reuse-light`, `--no-build`, `--plan-only [--script-out X]`. |
 | `python3 -m h3kit.package <map> meta` | Writes `ModInfo.json` and `multiplayer/<name>.json` into the map's package from its `project.py` (`Mod`: GUIDs, Workshop id, version, title, description). |
 | `python3 -m h3kit.package <map> images` | The Workshop images (large, thumbnail, loading screen), without text, from the map's `images.ART` (or its `scene()` fallback). |
-| `python3 -m h3kit.package <map> release [--yes]` | Syncs the package into the Excession upload folder and the installed mod; a dry run without `--yes`. |
+| `python3 -m h3kit.package <map> release [--yes]` | Syncs the package into the Excession upload folder (`Mod.upload_dir`); a dry run without `--yes`. |
 | `python3 -m h3kit.pack packs/<pack> build-shared\|build\|release` | A map pack: several maps in one mod, optionally built against one `shared.map` of their own. |
 | `python3 -m h3kit.strip <folder>` | Shrinks a shared pack's maps: drops chosen bitmaps' top mips. |
 | `python3 -m h3kit.catalog` | The prop catalog: checks every tag is in the kit and prints the table. |
@@ -96,6 +96,6 @@ The MCC Workshop uploader; it has a GUI only, so the upload is done by hand. Ope
 | `H3EK\work\structure.log` | `tool structure`: open edges, coplanar faces, bad UVs. |
 | `H3EK\work\lightmap.log` | The bake driver's output, with the time of each stage (`*** farm stage: ... ***`). |
 | `H3EK\faux\111\logs\dillum0.txt` | The bake's first stage. `container [LIGHT_MAX_INSTANCE] using 0.000008MB` means no lights reached the bake. |
-| `H3EK\work\build.log` | `build-cache-file`. Hundreds of `OUT OF MEMORY: object_header_new failed` lines are expected on a big map (the tool's small pool, see [runtime-limits.md](runtime-limits.md)); "missing scenario resource" warnings for lights and structure lighting are expected too. |
+| `H3EK\work\build.log` | `build-cache-file`. `OUT OF MEMORY: object_header_new failed` lines mean the level's objects overflow the object pool, which the game has too: on MCC those objects won't be created in game (see [runtime-limits.md](runtime-limits.md); `--plan-only` shows the budget); "missing scenario resource" warnings for lights and structure lighting are expected too. |
 | `H3EK\work\<name>_light_stamp.json` | What the map's last bake was made from (for `--reuse-light`). |
 | `H3EK\work\<name>.txt`, `<name>_collision.txt` | The last build's mbedit script and the level's collision dump. |

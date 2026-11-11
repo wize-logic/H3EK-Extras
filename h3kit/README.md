@@ -77,7 +77,7 @@ python3 -m h3kit.pack packs/<pack> build-shared|build|release [--yes]   # map pa
 
 | Module | What it does |
 | --- | --- |
-| `env.py` | Machine paths (kit, MCC, Workshop, Reclaimer, .NET), WSL to Windows paths (`win`). |
+| `env.py` | Machine paths (kit, MCC, Workshop, .NET, optionally Reclaimer), WSL to Windows paths (`win`). |
 | `project.py` | `Project`, `BaseMap`, `Mod`; `use()`, `active()`, `load(map folder)`. |
 | `bases.py` | Known stock base maps: `SIDEWINDER` (Avalanche), with its leftover objects, kill volumes and the Forge entries it lacks. |
 | `ek.py` | `tool`, `mbedit` (exits with the failing line), `export_xml` / `export_cached`, `tag_exists`, `bake` (the kit's farm script, any job id). |
@@ -99,7 +99,7 @@ python3 -m h3kit.pack packs/<pack> build-shared|build|release [--yes]   # map pa
 | `donor.py` | `Donor`: vehicles and crates from another built map (placeholders, then `tools/hgport`), with checks, seat fixes and sound banks. |
 | `build.py` | `Map`, `Builder`, `main`: the build, `--reuse-light`, `--plan-only`. |
 | `lighting_test.py` | Measuring floors, a test bake (job 222) and the light per floor. |
-| `package.py` | ModInfo and map JSON, Workshop images, `release` to the upload and install folders. |
+| `package.py` | ModInfo and map JSON, Workshop images, `release` to the Excession upload folder. |
 | `pack.py` | Map packs: several projects' maps in one mod; a shared pack (`Pack(shared=True)`) rebuilds them with the kit's shared build (`build_shared`, steps 3-13 for its scenarios only, never deleting a built map) and ships its own `halo3\maps\shared.map`. |
 | `strip.py` | `strip`, `verify`: drop chosen bitmaps' top mips (the armour's, `ARMOR`) from a shared pack's `shared.map` and repoint its maps; `Pack.strip_highres` runs it after `build_shared`. |
 | `cache.py`, `cache_resources.py`, `bsp_terrain.py` | Reading (and patching) built `.map` files: tags, resources, a stock map's collision ground. |
