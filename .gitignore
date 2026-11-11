@@ -1,0 +1,13 @@
+# machine paths (h3kit/env.py)
+local_paths.json
+
+__pycache__/
+*.pyc
+bin/
+obj/
+
+# built maps and packages
+*.map
+/maps/*/package/
+/packs/*/package/
+/packs/*/shared/
