@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- hgport: Assembly's Blamite (vendor/, GPLv3) plus Program.cs. build.sh copies
+       this folder to H3EK\work\hgport and builds it there with the Windows SDK. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>TRACE;NET45;X64</DefineConstants>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <Nullable>disable</Nullable>
+    <NoWarn>CS0168;CS0169;CS0219;CS0414;CS0649;CS0612;CS0618;CS1591;CS8632</NoWarn>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="vendor\Blamite\**\*.cs" Exclude="vendor\Blamite\Properties\AssemblyInfo.cs" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.8.0" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    <None Include="vendor\Blamite\Formats\**\*" Link="Formats\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="vendor\Plugins\**\*" Link="Plugins\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
